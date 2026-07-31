@@ -1,0 +1,13 @@
+{
+    "modules": [
+        "log_wiper",
+        "registry_cleaner",
+        "timestomp",
+        "secure_delete",
+        "free_space_wiper",
+        "history_cleaner",
+        "report"
+    ],
+    "secure_delete_passes": 3,
+    "token_required": true
+}
