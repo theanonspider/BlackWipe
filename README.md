@@ -1,31 +1,16 @@
-# 🕷️ BlackWipe — Anti-Forensic Tool
+# 🕷️ BlackWipe — Anti‑Forensic Tool
 
-> ⚠️ **AVERTISSEMENT** — Cet outil est conçu exclusivement pour :
-> - Des tests d'intrusion **autorisés** (pentests, Red Team)
-> - La **formation** et la **recherche** en cybersécurité défensive
-> - Des démonstrations d'impact dans un cadre **contractuel**
->
-> **Toute utilisation sur un système sans autorisation écrite est ILLÉGALE.**
-> L'auteur décline toute responsabilité en cas d'usage malveillant.
+> ⚠️ **AVERTISSEMENT** — Usage exclusivement éducatif et défensif.  
+> Toute utilisation non autorisée est **ILLÉGALE** et engage votre responsabilité.
 
 ---
 
-## 📖 Description
+## 📖 Pourquoi BlackWipe ?
 
-**BlackWipe** est un outil anti‑forensique pour Windows et Linux. Il permet d'effacer les traces d'une opération autorisée : logs, timestamps, fichiers, registre, espace libre, historiques, MFT, etc.
+**BlackWipe** est un outil anti‑forensique léger mais puissant.  
+Il permet d’effacer les traces d’une opération autorisée sur Windows (et partiellement Linux) : logs, fichiers, registre, historiques, etc.
 
-L'outil ne communique **jamais** avec Internet. Toutes les actions sont enregistrées localement dans un rapport (JSON + HTML).
-
----
-
-## 🔐 Sécurité intégrée
-
-L'exécution est **bloquée** sans un fichier d'autorisation :
-
-1. Créer le fichier `blackwipe.token` à la racine
-2. Écrire `BLACKWIPE_AUTHORIZED` dedans
-
-Sans ce fichier, le programme refuse de s'exécuter.
+Que vous soyez **pentester, Red Teamer ou chercheur en sécurité**, BlackWipe vous aide à **nettoyer proprement** après une mission.
 
 ---
 
@@ -34,95 +19,57 @@ Sans ce fichier, le programme refuse de s'exécuter.
 | Module | Fonction |
 |--------|----------|
 | `log_wiper` | Efface les logs système (Event Logs, syslog) |
-| `timestomp` | Modifie les timestamps des fichiers |
-| `secure_delete` | Écrasement sécurisé (DoD, Gutmann, aléatoire) |
+| `timestomp` | Modifie les timestamps de fichiers |
+| `secure_delete` | Écrasement sécurisé (DoD 5220.22‑M, Gutmann) |
 | `registry_cleaner` | Nettoie les clés de registre sensibles |
-| `free_space_wiper` | Écrase l'espace libre des disques |
+| `free_space_wiper` | Écrase l’espace libre des disques |
 | `history_cleaner` | Efface historiques (navigateurs, shell, fichiers récents) |
 | `mft_cleaner` | Nettoie la Master File Table (NTFS) |
 | `report` | Génère des rapports JSON + HTML |
 
 ---
 
-## ⚙️ Installation
+## 🔐 Sécurité
 
-```bash
-git clone https://github.com/theanonspider/BlackWipe.git
-cd BlackWipe
-pip install -r requirements.txt
-```
-
----
-
-## 🚀 Utilisation
-
-### 1. Créer le token d'autorisation
+Un **token** est obligatoire pour exécuter l’outil :
 
 ```bash
 echo "BLACKWIPE_AUTHORIZED" > blackwipe.token
-```
 
-### 2. Exécuter un module
+Sans ce fichier, BlackWipe refuse de s’exécuter.
+C’est votre garde‑fou contre toute utilisation accidentelle.
+⚙️ Installation
+bash
 
-```bash
-# Effacer les logs
+git clone https://github.com/theanonspider/BlackWipe.git
+cd BlackWipe
+pip install -r requirements.txt
+echo "BLACKWIPE_AUTHORIZED" > blackwipe.token
+
+🚀 Exemples d’utilisation
+bash
+
+# 1. Effacer les logs
 python blackwipe.py wipe-logs
 
-# Modifier les timestamps d'un fichier
-python blackwipe.py timestomp -p /path/to/file
+# 2. Modifier les timestamps d’un fichier
+python blackwipe.py timestomp -p /path/to/file --random
 
-# Supprimer sécurisé un fichier (3 passes)
+# 3. Supprimer sécurisé un fichier (3 passes DoD)
 python blackwipe.py secure-delete -p /path/to/file -n 3
 
-# Nettoyer le registre
-python blackwipe.py registry-cleaner
-
-# Effacer l'espace libre du disque C:
-python blackwipe.py wipe-free-space -d C:
-
-# Nettoyer les historiques
+# 4. Nettoyer tous les historiques
 python blackwipe.py history-cleaner --targets all
 
-# Nettoyer la MFT
-python blackwipe.py mft-cleaner -d C:
+# 5. Générer un rapport
+python blackwipe.py report -o ./reports -f html
+📄 Sortie
 
-# Générer un rapport
-python blackwipe.py report
-```
+Rapports dans reports/ : JSON + HTML.
 
-### 3. Voir toutes les commandes
+⚖️ Licence
 
-```bash
-python blackwipe.py --help
-```
+Usage éducatif et défensif uniquement.
+👤 Auteur
 
----
-
-## 📄 Sortie
-
-Tous les modules génèrent un rapport dans le dossier `reports/` :
-- `blackwipe_report_<timestamp>.json`
-- `blackwipe_report_<timestamp>.html`
-
----
-
-## 🛠️ Compatibilité
-
-| OS | Modules fonctionnels |
-|----|----------------------|
-| Windows 10/11 | ✅ Tous les modules |
-| Linux | ✅ log_wiper, timestomp, secure_delete, free_space_wiper, history_cleaner |
-| macOS | ⚠️ Partiel (non testé) |
-
----
-
-## ⚖️ Licence
-
-Ce projet est fourni à des fins **exclusivement éducatives et défensives**.
-Toute utilisation non autorisée est interdite.
-
----
-
-## 👤 Auteur
-
-Projet maintenu par **@theanonspider** — Pour la cybersécurité éthique. 🐺
+@theanonspider — Cybersécurité éthique. 🐺
